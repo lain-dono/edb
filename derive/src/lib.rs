@@ -27,6 +27,9 @@ fn impl_from_args(input: &syn::DeriveInput) -> TokenStream {
             let removers = gen.iter().map(|f| f.remove());
             let inserters = gen.iter().map(|f| f.insert());
 
+            let clear = gen.iter().map(|f| f.clear());
+            let with_capacity = gen.iter().map(|f| f.with_capacity());
+
             quote! {
                 ::edb::slotmap::new_key_type! {
                     #vis struct #key;
@@ -73,6 +76,19 @@ fn impl_from_args(input: &syn::DeriveInput) -> TokenStream {
                             #( #removers )*
                             value
                         })
+                    }
+
+                    pub fn clear(&mut self) {
+                        self.storage.clear();
+                        #( #clear )*
+                    }
+
+                    pub fn with_capacity(capacity: usize) -> Self {
+                        Self {
+                            storage: ::::edb::Storage::with_capacity_and_key(capacity),
+
+                            #( #with_capacity )*
+                        }
                     }
 
                     #( #getters )*
@@ -133,6 +149,22 @@ impl GenField {
         match self.index {
             GenIndex::Index => quote! { #index : ::edb::Index<#ty, #key>, },
             GenIndex::IndexSet => quote! { #index : ::edb::IndexSet<#ty, #key>, },
+        }
+    }
+
+    fn with_capacity(&self) -> TokenStream {
+        let index = format_ident!("index_{}", self.name);
+        match self.index {
+            GenIndex::Index => quote! { #index : ::edb::Index::with_capacity(capacity), },
+            GenIndex::IndexSet => quote! { #index : ::edb::IndexSet::with_capacity(capacity), },
+        }
+    }
+
+    fn clear(&self) -> TokenStream {
+        let index = format_ident!("index_{}", self.name);
+        match self.index {
+            GenIndex::Index => quote! { self.#index.clear(); },
+            GenIndex::IndexSet => quote! { self.#index.clear(); },
         }
     }
 
