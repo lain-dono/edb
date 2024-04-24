@@ -5,9 +5,12 @@ name = "edb"
 version = "0.1.0"
 edition = "2021"
 
+authors = ["Lain-dono <lain.dono@gmail.com>"]
+license = "MIT OR Apache-2.0"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-edb-derive = { path = "derive" }
+edb-derive = { version = "0.1.0", path = "derive" }
 hashbrown = "0.14.3"
 slotmap = "1.0.7"
