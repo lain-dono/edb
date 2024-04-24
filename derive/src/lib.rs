@@ -85,7 +85,7 @@ fn impl_from_args(input: &syn::DeriveInput) -> TokenStream {
 
                     pub fn with_capacity(capacity: usize) -> Self {
                         Self {
-                            storage: ::::edb::Storage::with_capacity_and_key(capacity),
+                            storage: ::edb::Storage::with_capacity_and_key(capacity),
 
                             #( #with_capacity )*
                         }
