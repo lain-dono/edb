@@ -5,6 +5,7 @@ name = "edb"
 version = "0.1.0"
 edition = "2021"
 
+description = "an in-memory database"
 authors = ["Lain-dono <lain.dono@gmail.com>"]
 license = "MIT OR Apache-2.0"
 
